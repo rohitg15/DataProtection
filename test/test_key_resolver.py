@@ -4,13 +4,13 @@ import logging
 from crypto.aead_dek_context import AeadDekContext
 from crypto.aes_keywrap_kek_context import AesKeyWrapKekContext
 from crypto.ikey_resolver import IKeyResolver
-from crypto.key_metadata import KeyMetadata
+from crypto.root_key import RootKey
 
 class TestKeyResolver(IKeyResolver):
     def __init__(self, logger) -> None:
         self._logger = logger
 
-        self._kek = KeyMetadata(
+        self._kek = RootKey(
             kek_alg="AESKW256",
             dek_alg="AES256GCM",
             kek_size_bytes=32,
@@ -32,13 +32,13 @@ class TestKeyResolver(IKeyResolver):
     def get_kid_size_bytes(self) -> int:
         return len(self._kek._kid)
 
-    def get_kek_ctx_for_protect(self):
+    async def get_kek_ctx_for_protect(self):
         return self._kek_ctx
 
-    def get_kek_ctx_for_unprotect(self, kid: bytes):
+    async def get_kek_ctx_for_unprotect(self, kid: bytes):
         if kid != self._kek._kid:
             raise Exception(f'error: got invalid kid : {kid.hex()}, expected : {self._kek._kid.hex()}')
         return self._kek_ctx
 
-    def get_dek_ctx(self):
+    async def get_dek_ctx(self):
         return self._dek_ctx

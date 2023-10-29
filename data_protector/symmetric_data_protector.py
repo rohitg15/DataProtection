@@ -7,13 +7,13 @@ class SymmetricDataProtector(IDataProtector):
         self._key_resolver = Preconditions.check_not_null( key_resolver )
         self._kid_size_bytes = self._key_resolver.get_kid_size_bytes()
 
-    def protect(self, data: bytearray, aad: bytearray = None) -> bytearray:
+    async def protect(self, data: bytearray, aad: bytearray = None) -> bytearray:
         Preconditions.check_not_null( data )
-        kek_ctx = self._key_resolver.get_kek_ctx_for_protect()
-        aead = self._key_resolver.get_dek_ctx()
+        kek_ctx = await self._key_resolver.get_kek_ctx_for_protect()
+        aead = await self._key_resolver.get_dek_ctx()
         return  aead.protect(data, aad, kek_ctx.wrap_key)
         
-    def unprotect(self, ciphertext: bytearray, aad: bytearray = None) -> bytearray:
+    async def unprotect(self, ciphertext: bytearray, aad: bytearray = None) -> bytearray:
         Preconditions.check_not_null( ciphertext )
         self._logger.debug(f'ciphertext: {ciphertext.hex()}')
 
@@ -25,8 +25,8 @@ class SymmetricDataProtector(IDataProtector):
 
 
 
-        kek_ctx = self._key_resolver.get_kek_ctx_for_unprotect( kid )
-        aead = self._key_resolver.get_dek_ctx()
+        kek_ctx = await self._key_resolver.get_kek_ctx_for_unprotect( kid )
+        aead = await self._key_resolver.get_dek_ctx()
         wrapped_dek_size_bytes = aead.get_key_size_bytes() + kek_ctx.get_key_wrap_tag_size_bytes()
         
         self._logger.debug(f'wrapped_dek_sie_bytes: {wrapped_dek_size_bytes}, kid_size_bytes : {self._kid_size_bytes}')

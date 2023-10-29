@@ -6,13 +6,13 @@ class IKeyResolver(ABC):
         pass
 
     @abstractmethod
-    def get_kek_ctx_for_protect(self):
+    async def get_kek_ctx_for_protect(self):
         pass
 
     @abstractmethod
-    def get_kek_ctx_for_unprotect(kid: str):
+    async def get_kek_ctx_for_unprotect(self, kid: str):
         pass
 
     @abstractmethod
-    def get_dek_ctx():
+    async def get_dek_ctx(self):
         pass
