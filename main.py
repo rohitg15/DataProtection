@@ -7,8 +7,7 @@ async def _main_():
     logger = logging.getLogger('secrets')
     logger.setLevel(logging.INFO)
     
-    # TODO: parse config from file, None returns default
-    config = parse_config_from_file(None)
+    config = parse_config_from_file("config.ini")
     data_protector = await DataProtectorFactory.create_from_akv_resolver(logger, config)
     async with data_protector:
         input_val = input("enter text to protect: ")
