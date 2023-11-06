@@ -16,3 +16,7 @@ class IKeyResolver(ABC):
     @abstractmethod
     async def get_dek_ctx(self):
         pass
+
+    @abstractmethod
+    async def __cleanup__(self):
+        pass

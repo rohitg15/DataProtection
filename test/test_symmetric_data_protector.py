@@ -25,15 +25,17 @@ class TestSymmetricDataProtector(unittest.TestCase):
             test_key_resolver
         )
 
-        msg = 'hello world!'
-        aad = '12345'
-        b_msg = msg.encode('utf-8')
-        b_aad = aad.encode('utf-8')
+        async with sdp:
+            msg = 'hello world!'
+            aad = '12345'
+            b_msg = msg.encode('utf-8')
+            b_aad = aad.encode('utf-8')
 
-        ciphertext = await sdp.protect(data=b_msg, aad=b_aad)
-        plaintext = await sdp.unprotect(ciphertext=ciphertext, aad=b_aad)
-        
-        assert (plaintext == b_msg)
+            ciphertext = await sdp.protect(data=b_msg, aad=b_aad)
+            print (f'ciphertext = {ciphertext.hex()}')
+            plaintext = await sdp.unprotect(ciphertext=ciphertext, aad=b_aad)
+            
+            assert (plaintext == b_msg)
 
 
 

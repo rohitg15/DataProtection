@@ -21,7 +21,7 @@ class TestKeyResolver(IKeyResolver):
 
         self._kek_ctx = AesKeyWrapKekContext(
             logger=self._logger,
-            kek=self._kek
+            root_key=self._kek
         )
 
         self._dek_ctx = AeadDekContext(
@@ -40,5 +40,8 @@ class TestKeyResolver(IKeyResolver):
             raise Exception(f'error: got invalid kid : {kid.hex()}, expected : {self._kek._kid.hex()}')
         return self._kek_ctx
 
-    async def get_dek_ctx(self):
+    def get_dek_ctx(self):
         return self._dek_ctx
+
+    async def __cleanup__(self):
+        return None

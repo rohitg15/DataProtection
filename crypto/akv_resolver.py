@@ -55,9 +55,9 @@ class AkvResolver(IKeyResolver):
         return AesKeyWrapKekContext(logger=self._logger, root_key=root_key)
         
     
-    async def get_kek_ctx_for_unprotect(self, kid: str):
+    async def get_kek_ctx_for_unprotect(self, kid: bytes):
         Preconditions.check_not_null_or_empty(kid)
-        
+        kid_hex_str = kid.hex()
         root_key = None
         # TODO: cache key locally and retrieve 
         # root key from cache
@@ -66,8 +66,8 @@ class AkvResolver(IKeyResolver):
         # expired, then check if key revoked
 
         if root_key is None:
-            self._logger.info(f'fetching root_key from akv : {kid}')
-            secret = await self._secret_client.get_secret(kid)
+            self._logger.info(f'fetching root_key from akv : {kid_hex_str}')
+            secret = await self._secret_client.get_secret(kid_hex_str)
             self._logger.debug(f'secret- id: {secret.id}, name: {secret.name}, value: {secret.value}')
             root_key = RootKey.from_json_str(secret.value)
     

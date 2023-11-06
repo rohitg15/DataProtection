@@ -30,7 +30,7 @@ class SymmetricDataProtector(IDataProtector):
             self._logger.info(err_msg)
             raise Exception(err_msg)
 
-        kek_ctx = await self._key_resolver.get_kek_ctx_for_unprotect( kid.hex() )
+        kek_ctx = await self._key_resolver.get_kek_ctx_for_unprotect( kid )
         aead = self._key_resolver.get_dek_ctx()
         wrapped_dek_size_bytes = aead.get_key_size_bytes() + kek_ctx.get_key_wrap_tag_size_bytes()
         
