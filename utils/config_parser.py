@@ -26,5 +26,6 @@ def parse_config_from_file(config_path: str) -> Config:
         kek_expiry_year_delta=int( lifetime_cnf['kek_expiry_year_delta'] ),
         kek_expiry_month_delta=int( lifetime_cnf['kek_expiry_month_delta'] ),
         kek_expiry_day_delta=int( lifetime_cnf['kek_expiry_day_delta'] ),
+        kek_cache_expiry_hours=int( lifetime_cnf['kek_cache_expiry_hours'] ),
         use_aes_ni=bool( optimization_cnf['use_aes_ni'] )
     )

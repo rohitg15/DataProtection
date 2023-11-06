@@ -32,6 +32,15 @@ class RootKey:
     def get_kek_tag_size_bytes(self) -> int:
         return self._kek_tag_size_bytes
 
+    def get_revoked(self) -> bool:
+        return self._is_revoked
+    
+    def get_expiry_datetime(self) -> datetime.datetime:
+        return self._expiry_date
+    
+    def get_created_datetime(self) -> datetime.datetime:
+        return self._created_date
+    
     def to_json_str(self) -> str:
         return json.dumps({
             "_kek_alg": self._kek_alg,
