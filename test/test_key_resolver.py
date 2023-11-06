@@ -16,7 +16,9 @@ class TestKeyResolver(IKeyResolver):
             kek_size_bytes=32,
             dek_size_bytes=32,
             kid_size_bytes=8,
-            kid=None
+            kek_tag_size_bytes=8,
+            kid=None,
+            kek=None
         )
 
         self._kek_ctx = AesKeyWrapKekContext(

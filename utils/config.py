@@ -9,5 +9,6 @@ class Config:
     dek_size_bytes: int = 32
     kid_size_bytes: int = 8
     use_aes_ni: bool = True
+    kek_tag_size_bytes = 8
     
 

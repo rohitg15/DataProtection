@@ -43,7 +43,8 @@ class AkvResolver(IKeyResolver):
                 dek_alg=self._config.dek_alg,
                 kek_size_bytes=self._config.kek_size_bytes,
                 dek_size_bytes=self._config.dek_size_bytes,
-                kid_size_bytes=self._config.kid_size_bytes
+                kid_size_bytes=self._config.kid_size_bytes,
+                kek_tag_size_bytes=self._config.kek_tag_size_bytes
             )
 
         secret_name = root_key.get_kid().hex()

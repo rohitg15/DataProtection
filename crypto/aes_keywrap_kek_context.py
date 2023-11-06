@@ -13,9 +13,8 @@ class AesKeyWrapKekContext(IKekContext):
         self._logger = Preconditions.check_not_null( logger )
         self._root_key = Preconditions.check_not_null( root_key )
         self._kek = self._root_key.get_key()
-        # TODO: update from config
-        self._key_wrap_alg_name = "AES256KW"
-        self._key_wrap_tag_size_bytes = 8
+        self._key_wrap_alg_name = self._root_key.get_kek_alg()
+        self._key_wrap_tag_size_bytes = self._root_key.get_kek_tag_size_bytes()
 
         
     def wrap_key(self, key_to_wrap: bytes) -> bytes:
