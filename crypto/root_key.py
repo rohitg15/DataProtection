@@ -1,8 +1,6 @@
 
 
-from dataclasses import dataclass
 import json
-
 from utils.preconditions import Preconditions
 from Crypto import Random
 
@@ -23,7 +21,15 @@ class RootKey:
         return self._kid
 
     def to_json_str(self) -> str:
-        return json.dumps(self.__dict__)
+        return json.dumps({
+            "_kek_alg": self._kek_alg,
+            "_dek_alg": self._dek_alg,
+            "_kek_size_bytes": self._kek_size_bytes,
+            "_dek_size_bytes": self._dek_size_bytes,
+            "_kid_size_bytes": len(self._kid),
+            "_kid": self._kid.hex(),
+            "_kek": self._kek.hex()
+        })
 
     @staticmethod
     def from_json_str(s: str):
@@ -34,8 +40,8 @@ class RootKey:
             kek_size_bytes=j['_kek_size_bytes'],
             dek_size_bytes=j['_dek_size_bytes'],
             kid_size_bytes=j['_kid_size_bytes'],
-            kid=j['_kid'],
-            kek=j['kek']
+            kid=bytes.fromhex(j['_kid']),
+            kek=bytes.fromhex(j['_kek'])
         )
 
 
