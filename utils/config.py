@@ -9,6 +9,9 @@ class Config:
     dek_size_bytes: int = 32
     kid_size_bytes: int = 8
     kek_tag_size_bytes: int = 8
+    kek_expiry_year_delta: int = 1
+    kek_expiry_month_delta: int = 0
+    kek_expiry_day_delta: int = 0
     use_aes_ni: bool = True
     
     

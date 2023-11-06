@@ -1,6 +1,7 @@
 
 
 from asyncio.log import logger
+import datetime
 from azure.identity.aio import DefaultAzureCredential
 from azure.keyvault.secrets.aio import SecretClient
 from azure.core.exceptions import ResourceNotFoundError
@@ -38,13 +39,21 @@ class AkvResolver(IKeyResolver):
 
         if root_key is None:
             self._logger.info(f'generating new root_key')
+            d = datetime.datetime.utcnow()
             root_key = RootKey(
                 kek_alg=self._config.kek_alg,
                 dek_alg=self._config.dek_alg,
                 kek_size_bytes=self._config.kek_size_bytes,
                 dek_size_bytes=self._config.dek_size_bytes,
                 kid_size_bytes=self._config.kid_size_bytes,
-                kek_tag_size_bytes=self._config.kek_tag_size_bytes
+                kek_tag_size_bytes=self._config.kek_tag_size_bytes,
+                expiry_date=d.replace(
+                    year=d.year + self._config.kek_expiry_year_delta, 
+                    month=d.month + self._config.kek_expiry_month_delta, 
+                    day=d.day + self._config.kek_expiry_day_delta
+                ),
+                created_date=d,
+                is_revoked=False # new key
             )
 
         secret_name = root_key.get_kid().hex()
@@ -71,6 +80,8 @@ class AkvResolver(IKeyResolver):
             secret = await self._secret_client.get_secret(kid_hex_str)
             self._logger.debug(f'secret- id: {secret.id}, name: {secret.name}, value: {secret.value}')
             root_key = RootKey.from_json_str(secret.value)
+
+            # TODO: Handle case when root_key is revoked
     
         return AesKeyWrapKekContext(logger=self._logger, root_key=root_key)
 

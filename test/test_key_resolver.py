@@ -1,5 +1,6 @@
 
 
+import datetime
 import logging
 from crypto.aead_dek_context import AeadDekContext
 from crypto.aes_keywrap_kek_context import AesKeyWrapKekContext
@@ -10,6 +11,7 @@ class TestKeyResolver(IKeyResolver):
     def __init__(self, logger) -> None:
         self._logger = logger
 
+        d = datetime.datetime.utcnow()
         self._kek = RootKey(
             kek_alg="AESKW256",
             dek_alg="AES256GCM",
@@ -17,6 +19,9 @@ class TestKeyResolver(IKeyResolver):
             dek_size_bytes=32,
             kid_size_bytes=8,
             kek_tag_size_bytes=8,
+            expiry_date=d.replace(year=d.year + 1),
+            created_date=d,
+            is_revoked=False,
             kid=None,
             kek=None
         )
