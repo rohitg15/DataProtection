@@ -48,7 +48,7 @@ class RootKey:
         
         cur_dt = datetime.datetime.utcnow()
         exp_dt = self._expiry_date
-        if exp_dt > cur_dt:
+        if cur_dt > exp_dt:
             return (False, f"expired - exp_dt {exp_dt}, cur_dt: {cur_dt}")
     
         return (True, "valid for protect")
@@ -59,7 +59,7 @@ class RootKey:
         
         cur_dt = datetime.datetime.utcnow()
         exp_dt = self._expiry_date
-        if exp_dt > cur_dt:
+        if cur_dt > exp_dt:
             return (True, f"valid for unprotect but expired - exp_dt {exp_dt}, cur_dt: {cur_dt}")
     
         return (True, "valid for unprotect and not expired")

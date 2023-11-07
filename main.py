@@ -5,20 +5,25 @@ from utils.config_parser import parse_config_from_file
 
 async def _main_():
     logger = logging.getLogger('secrets')
-    logger.setLevel(logging.INFO)
+    # logging.basicConfig(level=logging.DEBUG)
     
     config = parse_config_from_file("config.ini")
     data_protector = await DataProtectorFactory.create_from_akv_resolver(logger, config)
     async with data_protector:
-        input_val = input("enter text to protect: ")
-        input_aad = input("enter additional data for authentication/context: ")
-        input_aad = None if input_aad == "" else input_aad
-        
-        ciphertext = await data_protector.protect(input_val.encode('utf-8'), input_aad.encode('utf-8'))
-        print (f'ciphertext = {ciphertext.hex()}')
-        
-        plaintext = await data_protector.unprotect(ciphertext, input_aad.encode('utf-8'))
-        print (f'plaintext = {plaintext}')
+        while True:
+            try:
+                input_val = input("enter text to protect: ")
+                input_aad = input("enter additional data for authentication/context: ")
+                input_aad = None if input_aad == "" else input_aad
+                
+                ciphertext = await data_protector.protect(input_val.encode('utf-8'), input_aad.encode('utf-8'))
+                print (f'ciphertext = {ciphertext.hex()}')
+                
+                plaintext = await data_protector.unprotect(ciphertext, input_aad.encode('utf-8'))
+                print (f'plaintext = {plaintext}')
+            except KeyboardInterrupt:
+                print (f'Bye!')
+                break
 
 
 
