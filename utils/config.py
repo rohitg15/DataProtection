@@ -13,6 +13,7 @@ class Config:
     kek_expiry_month_delta: int = 0
     kek_expiry_day_delta: int = 0
     kek_cache_expiry_hours: int = 10
+    kek_cache_expiry_seconds: int = 10
     use_aes_ni: bool = True
     
     

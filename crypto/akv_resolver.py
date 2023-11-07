@@ -63,7 +63,7 @@ class AkvResolver(IKeyResolver):
                 # valid for protect, check cache and refresh if needed
                 root_key = self._protect_root_key
                 if not self._root_key_cache.get(protect_kid_str):
-                    root_key = self.__get_root_key_from_akv__(protect_kid_str)
+                    root_key = await self.__get_root_key_from_akv__(protect_kid_str)
     
                 return AesKeyWrapKekContext(logger=self._logger, root_key=root_key)
             

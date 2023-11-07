@@ -89,9 +89,9 @@ class RootKey:
             dek_size_bytes=j['_dek_size_bytes'],
             kid_size_bytes=j['_kid_size_bytes'],
             kek_tag_size_bytes=j['_kek_tag_size_bytes'],
-            expiry_date=j['_expiry_date'],
-            created_date=j['_created_date'],
-            is_revoked=j['_is_revoked'],
+            expiry_date=datetime.datetime.fromisoformat(j['_expiry_date']),
+            created_date=datetime.datetime.fromisoformat(j['_created_date']),
+            is_revoked=bool(j['_is_revoked']),
             kid=bytes.fromhex(j['_kid']),
             kek=bytes.fromhex(j['_kek'])
         )

@@ -31,7 +31,7 @@ class TimeBoundKeyCache:
         cached_dt, root_key = cached_dt_root_key_tuple
         cur_dt = datetime.datetime.utcnow()
 
-        if cur_dt.hour - cached_dt.hour > self._config.kek_cache_expiry_hours:
+        if (cur_dt - cached_dt).total_seconds() > self._config.kek_cache_expiry_seconds:
             # evict expired entry from cache
             self._logger.info(f'root_key with kid: {kid_str} was found in cache, but cache interval has expired, cur_dt: {cur_dt}, cached_dt: {cached_dt}')
             self._cache.pop(kid_str)
