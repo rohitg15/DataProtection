@@ -1,6 +1,7 @@
 
 import datetime
 import json
+from typing import Tuple
 from utils.preconditions import Preconditions
 from Crypto import Random
 
@@ -40,7 +41,29 @@ class RootKey:
     
     def get_created_datetime(self) -> datetime.datetime:
         return self._created_date
+
+    def is_valid_for_protect(self) -> Tuple[bool, str]:
+        if self.get_revoked():
+            return (False, "revoked")
+        
+        cur_dt = datetime.datetime.utcnow()
+        exp_dt = self._expiry_date
+        if exp_dt > cur_dt:
+            return (False, f"expired - exp_dt {exp_dt}, cur_dt: {cur_dt}")
     
+        return (True, "valid for protect")
+    
+    def is_valid_for_unprotect(self) -> Tuple[bool, str]:
+        if self.get_revoked():
+            return (False, "revoked")
+        
+        cur_dt = datetime.datetime.utcnow()
+        exp_dt = self._expiry_date
+        if exp_dt > cur_dt:
+            return (True, f"valid for unprotect but expired - exp_dt {exp_dt}, cur_dt: {cur_dt}")
+    
+        return (True, "valid for unprotect and not expired")
+
     def to_json_str(self) -> str:
         return json.dumps({
             "_kek_alg": self._kek_alg,
