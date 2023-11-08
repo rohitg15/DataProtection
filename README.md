@@ -49,8 +49,8 @@ python3 main.py
     data_protector = await DataProtectorFactory.create_from_akv_resolver(logger, config)
 
     async with data_protector:
-        data = "hello world"
-        aad = "some context"
+        data = b"hello world"
+        aad = b"some context"
         ciphertext = await data_protector.protect(data=data, aad=aad)
 
         retrieved_plaintext = await data_protector.unprotect(ciphertext=ciphertext, aad=aad)
