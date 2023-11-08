@@ -1,5 +1,5 @@
 # DataProtection
-Data protection library and CLI tool to securely protect data with secret keys managed via Azure Key Vault.
+Data protection library and CLI tool to securely protect data with secret keys managed via Azure Key Vault. Internally, the application uses azure identity libraries to securely authenticate to Azure Key Vault using managed identities (or prompting to login on desktop environments).
 
 # How to run locally for testing?
 
@@ -46,16 +46,32 @@ python3 main.py
 
 ```python
 
+    import logging
+    import asyncio
+    from data_protector.data_protector_factory import DataProtectorFactory
+    from utils.config_parser import parse_config_from_file
+
+    logger = logging.getLogger('secrets')
     config = parse_config_from_file("config.ini")
-    data_protector = await DataProtectorFactory.create_from_akv_resolver(logger, config)
+
+    data_protector = await DataProtectorFactory.create_from_akv_resolver(
+        logger, 
+        config
+        )
 
     async with data_protector:
         data = b"hello world"
         aad = b"some context"
 
-        ciphertext = await data_protector.protect(data=data, aad=aad)
+        ciphertext = await data_protector.protect(
+            data=data, 
+            aad=aad
+            )
 
-        retrieved_plaintext = await data_protector.unprotect(ciphertext=ciphertext, aad=aad)
+        plaintext = await data_protector.unprotect(
+            ciphertext=ciphertext, 
+            aad=aad
+            )
 ```
 
 
