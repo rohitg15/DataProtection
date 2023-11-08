@@ -5,7 +5,7 @@ from utils.config_parser import parse_config_from_file
 
 async def _main_():
     logger = logging.getLogger('secrets')
-    logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(level=logging.INFO)
     
     config = parse_config_from_file("config.ini")
     data_protector = await DataProtectorFactory.create_from_akv_resolver(logger, config)

@@ -54,7 +54,7 @@ class AeadDekContext(IDekContext):
         except ValueError:
             err_msg = f'ciphertext tampering detected, received mac : {tag.hex()}, ciphertext: {ciphertext.hex()}, nonce: {nonce.hex()}, aad : {aad.hex()}'
             self._logger.info(err_msg)
-            raise Exception(err_msg)
+            raise ValueError(err_msg)
             
         return plaintext
 
