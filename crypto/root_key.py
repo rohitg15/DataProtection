@@ -96,4 +96,25 @@ class RootKey:
             kek=bytes.fromhex(j['_kek'])
         )
 
+    @staticmethod
+    def create_new_from_config(config):
+        d = datetime.datetime.utcnow()
+        return RootKey(
+            kek_alg=config.kek_alg,
+            dek_alg=config.dek_alg,
+            kek_size_bytes=config.kek_size_bytes,
+            dek_size_bytes=config.dek_size_bytes,
+            kid_size_bytes=config.kid_size_bytes,
+            kek_tag_size_bytes=config.kek_tag_size_bytes,
+            expiry_date=d.replace(
+                year=d.year + config.kek_expiry_year_delta, 
+                month=d.month + config.kek_expiry_month_delta, 
+                day=d.day + config.kek_expiry_day_delta
+            ),
+            created_date=d,
+            is_revoked=False # new key
+        )
+
+
+
 
