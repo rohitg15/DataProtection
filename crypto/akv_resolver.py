@@ -32,26 +32,7 @@ class AkvResolver(IKeyResolver):
     async def __cleanup__(self):
         await self._secret_client.close()
         await self._credential.close()
-
-    def __get_new_root_key__(self):
-        self._logger.info(f'generating new root_key')
-        d = datetime.datetime.utcnow()
-        return RootKey(
-            kek_alg=self._config.kek_alg,
-            dek_alg=self._config.dek_alg,
-            kek_size_bytes=self._config.kek_size_bytes,
-            dek_size_bytes=self._config.dek_size_bytes,
-            kid_size_bytes=self._config.kid_size_bytes,
-            kek_tag_size_bytes=self._config.kek_tag_size_bytes,
-            expiry_date=d.replace(
-                year=d.year + self._config.kek_expiry_year_delta, 
-                month=d.month + self._config.kek_expiry_month_delta, 
-                day=d.day + self._config.kek_expiry_day_delta
-            ),
-            created_date=d,
-            is_revoked=False # new key
-        )
-        
+    
     async def get_kek_ctx_for_protect(self):
         root_key = None
         if self._protect_root_key is not None:
@@ -70,7 +51,7 @@ class AkvResolver(IKeyResolver):
         # if we're here, then either we didn't find protect_root_key
         # or it was found but invalid for protect
         # don't evict from cache since unprotect might require
-        root_key = self.__get_new_root_key__()
+        root_key = RootKey.create_new_from_config(self._config)
             
         secret_name = root_key.get_kid().hex()
         secret_value = root_key.to_json_str()
