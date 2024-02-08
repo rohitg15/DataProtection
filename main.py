@@ -17,10 +17,10 @@ async def _main_():
                 input_aad = input("enter optional data for context (this is authenticated not encrypted): ")
                 input_aad = None if input_aad == "" else input_aad
                 
-                ciphertext = await data_protector.protect(input_val.encode('utf-8'), input_aad.encode('utf-8'))
+                ciphertext = await data_protector.protect(input_val.encode('utf-8'), input_aad.encode('utf-8')) if input_aad is not None else await data_protector.protect(input_val.encode('utf-8'))
                 print (f'ciphertext = {ciphertext.hex()}')
                 
-                plaintext = await data_protector.unprotect(ciphertext, input_aad.encode('utf-8'))
+                plaintext = await data_protector.unprotect(ciphertext, input_aad.encode('utf-8')) if input_aad is not None else await data_protector.unprotect(ciphertext)
                 print (f'decrypted plaintext = {plaintext.decode("utf-8")}')
             except KeyboardInterrupt:
                 print (f'Bye!')

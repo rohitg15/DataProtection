@@ -20,6 +20,8 @@ cd DataProtection
 
 4. edit 'config.ini' and update vault_uri eg: vault_uri="https://myvault.vault.azure.net/"
 
+NOTE: Ensure that this vault is created and the caller has the KeyVault Secrets Officer built-in role assigned
+
 5. install dependencies:  
 
 ```console
